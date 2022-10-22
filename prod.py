@@ -5,11 +5,8 @@ from fake_useragent import UserAgent
 from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
-
 from bs4 import BeautifulSoup
 
-
-# url = "https://www.ozon.ru/product/kvadrokopter-s-kameroy-radioupravlyaemyy-letayushchiy-dron-s-akkumulyatorom-724536456/?sh=h6B8DtGucQ"
 
 
 async def get_page(url: str) -> str:
@@ -36,7 +33,7 @@ async def get_page(url: str) -> str:
 
     print(chrome_options.arguments)
 
-    driver = webdriver.Chrome(executable_path="chromdrv/chromedriver", options=chrome_options)
+    driver = webdriver.Chrome(executable_path="/home/andrey/python/selenium_test/chromedriver", options=chrome_options)
 
     try:
         driver.get(url=url)
@@ -88,28 +85,6 @@ async def get_product(url: str) -> dict:
 
 
 if __name__ == "__main__":
+    sys.path.append("/home/andrey/python/selenium_test/")
     asyncio.run(get_product(
         "https://www.ozon.ru/product/planshet-s-klaviaturoy-wuya-podderzhka-gps-navigatsii-podhodit-dlya-igr-kino-i-749429137/?advert=LO76fZ6RQAxLfIGlFx2TK6SLdOmyvvlR_gIG8g6c7pnEi9I2EhnpuVy2QWNQDElfRo3FAyCOr3R9nBj7ca_qKqAHR1kMQWo5fabX8KYQRgSMFW72btB8pNDRVKvys8Ud5cVZ76TgnNnuybJCmxNL_4k5x6DNkkkf4St2xOGK_-g0zE25O53v8DxcTvqESnLEOGFDOqJ_cGlBxhOGN7a7cA7g-XofdZiiXocQMVjqgyV0AIGmnEOrKqn9kJda-wLh9a3kqDpYpKRYL9kCiNPcJrRLLaIBI06lAjSeCco3XdNpbNhNP0xubZ2KtMNhNkLGzyn2-vOeEPUaBE7DAn7AXrC_Q12umW-QcmtKqnH9BLq9gA2PCWj1SzwLcKA0tuaQMr4_FD1w-w1Y9ljBXts_YgyHwtWVxFa_k_0VRZIpB3JjQTpb6FJQvrTfVXc33stWehYBGzlDU0c-fwBkPTS-LAJJ0STBDbEyz22Q5CtKxBdsj4Ou_SaJdbUIAeUkjB6Jotk-dHT_ofwIfLHmT3jVrNIJkQFr7rMXBPWIlHCpGBxejDQ3-tVBWk6xS-3WOOU9AIOPE3E8oB0ldXZs7OZXoCQ-rKCwuzVKWl8_7oxcj-kfchi5GpmW7rUlBuKzvbOOWlQ-ziV6oO-t6O1g3YIiTs-TUj5ZpQpOHMqn6Yemb9c&avtc=1&avte=2&avts=1666429096&sh=h6B8Dgt9jw"))
-
-# url = "https://www.ozon.ru/api/composer-api.bx/page/json/v2?url=/product/stiralnaya-mashina-atlant-sma-60s1010-00-belyy-257776483"
-#
-# headers = {
-#     "authority": "www.ozon.ru",
-#     "path": "/api/composer-api.bx/page/json/v2?url=/product/stiralnaya-mashina-atlant-sma-60s1010-00-belyy-257776483",
-#     "scheme": "https",
-#     "cache-control": "max-age=0",
-#     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36",
-#     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-#     "accept-encoding": "gzip, deflate, br",
-#     "accept-language": "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7",
-#     'sec-ch-ua': '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"',
-#     "sec-ch-ua-mobile": "?0",
-#     "sec-ch-ua-platform": "Windows",
-#     "sec-fetch-dest": "document",
-#     "sec-fetch-mode": "navigate",
-#     "sec-fetch-site": "none",
-#     "sec-fetch-user": "?1",
-#     "upgrade-insecure-requests": "1",
-#
-# }
-#
