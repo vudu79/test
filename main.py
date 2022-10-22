@@ -36,20 +36,24 @@ def main():
     try:
         pass
         driver.get(url=url)
-        time.sleep(20)
+        page_source = driver.page_source
 
-        title = driver.find_element(By.CLASS_NAME, "n9v")
-        print(title.text)
-        # div_price = driver.find_element(By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[3]/div[2]/div[2]/div/div/div/div[1]/div')
-        current_price = driver.find_element(By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[3]/div[2]/div[2]/div/div/div/div[1]/div/div/div/div/span[1]/span')
-
-        prev_price = driver.find_element(By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[3]/div[2]/div[2]/div/div/div/div[1]/div/div/div/div/span[2]')
-
-        image = driver.find_element(By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[3]/div[1]/div/div[2]').find_elements(By.TAG_NAME, "img")
-
-        print(current_price.text)
-        print(prev_price.text)
-        print(image)
+        with open("123.html", "w", encoding="utf-8") as file:
+            file.write(page_source)
+        # time.sleep(30)
+        #
+        # title = driver.find_element(By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[2]/div/div/div[1]/div[2]/h1')
+        # print(title.text)
+        # # div_price = driver.find_element(By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[3]/div[2]/div[2]/div/div/div/div[1]/div')
+        # current_price = driver.find_element(By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[3]/div[2]/div[2]/div/div/div/div[1]/div/div/div/div/span[1]/span')
+        #
+        # prev_price = driver.find_element(By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[3]/div[2]/div[2]/div/div/div/div[1]/div/div/div/div/span[2]')
+        #
+        # image = driver.find_element(By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[3]/div[1]/div/div[2]').find_elements(By.TAG_NAME, "img")
+        #
+        # print(current_price.text)
+        # print(prev_price.text)
+        print(page_source)
 
         #
         # driver.get_screenshot_as_file("1.png")
