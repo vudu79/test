@@ -1,16 +1,17 @@
 import asyncio
 import time
 import sys
-
+import aiohttp
+import asyncio
 import requests
 import json
+import os
 from fake_useragent import UserAgent
 from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
 from bs4 import BeautifulSoup
-
 
 #
 # async def get_page(url: str) -> str:
@@ -100,6 +101,39 @@ from bs4 import BeautifulSoup
 #     return result
 
 
+import asyncio
+import uuid
+import aiohttp
+import async_timeout
+
+
+async def get_url(url, session):
+    file_name = str(uuid.uuid4())
+    async with async_timeout.timeout(120):
+        async with session.get(url) as response:
+            with open(file_name, 'wb') as fd:
+                async for data in response.content.iter_chunked(1024):
+                    fd.write(data)
+                    return 'Successfully downloaded ' + file_name
+
+
+async def as_download(urls):
+    async with aiohttp.ClientSession() as session:
+        tasks = [get_url(url, session) for url in urls]
+        return await asyncio.gather(*tasks)
+
+
+urls = ["https://www.python.org/events/python-events/801/",
+        "https://www.python.org/events/python-events/790/",
+        "https://www.python.org/events/python-user-group/816/",
+        "https://www.python.org/events/python-events/757/"]
+
+loop = asyncio.get_event_loop()
+results = loop.run_until_complete(as_download(urls))
+
+print('\n'.join(results))
+
+
 def main():
     domen_name = "https://pozdravik.com/"
     words = {
@@ -166,49 +200,68 @@ def main():
     #     year[words[name[-1]]] = days
     # with open('year.json', 'w', encoding='utf-8') as f:
     #     json.dump(year, f, ensure_ascii=False, indent=4)
+    #
 
-    year = dict()
+    # year = dict()
+    #
+    # with open('year.json', 'r', encoding='utf-8') as f:
+    #     js = f.read()
+    #
+    # year = json.loads(js)
+    # monthes = year.keys()
+    #
+    # for month in monthes:
+    #     month_dict = {}
+    #     month_ivents = year[month]
+    #     month_ivents_keys = month_ivents.keys()
+    #     print(f'обарбатываю месяц - {month}')
+    #
+    #     for ivents_key in month_ivents_keys:
+    #         print(f'ищу открытки из {ivents_key}')
+    #
+    #         res = requests.get(month_ivents[ivents_key])
+    #         soup = BeautifulSoup(res.text, "html.parser")
+    #
+    #         div = soup.find("div", class_="b-cmall__dsn_center_block1_content")
+    #
+    #         img_url_list = []
+    #
+    #         for img in div.find_all("img"):
+    #             img_url_list.append(domen_name + img["src"])
+    #
+    #         key_name = ivents_key.replace("-", "").replace(" ", "_")
+    #         month_dict[key_name] = img_url_list
+    #
+    #     print(f'записываю ссылки в файл {month}.json')
+    #
+    #     with open(f'{month}.json', 'w', encoding='utf-8') as f:
+    #         json.dump(month_dict, f, ensure_ascii=False, indent=4)
 
-    with open('year.json', 'r', encoding='utf-8') as f:
-        js = f.read()
+    month = dict()
+    base_image_dir = "images"
+    base_month_dir = "monthes"
 
-    year = json.loads(js)
-    monthes = year.keys()
+    for month in words.values():
+        if not os.path.isdir(os.path.join(base_image_dir, month)):
+            os.mkdir(os.path.join(base_image_dir, month))
 
-    for month in monthes:
-        month_dict = {}
-        month_ivents = year[month]
-        month_ivents_keys = month_ivents.keys()
-        print(f'обарбатываю месяц - {month}')
+        with open(f'{os.path.join(base_month_dir, month)}.json', 'r', encoding='utf-8') as f:
+            js = f.read()
 
-        for ivents_key in month_ivents_keys:
-            print(f'ищу открытки из {ivents_key}')
+        month_dict = json.loads(js)
+        events_list = list(month_dict.keys())
 
-            res = requests.get(month_ivents[ivents_key])
-            soup = BeautifulSoup(res.text, "html.parser")
+        for event in events_list:
+            if not os.path.isdir(os.path.join(base_image_dir, month, event)):
+                os.mkdir(os.path.join(base_image_dir, month, event))
+                file_name = event + ".json"
 
-            div = soup.find("div", class_="b-cmall__dsn_center_block1_content")
-
-            img_url_list = []
-
-            for img in div.find_all("img"):
-                img_url_list.append(domen_name + img["src"])
-
-            key_name = ivents_key.replace("-", "").replace(" ", "_")
-            month_dict[key_name] = img_url_list
-
-        print(f'записываю ссылки в файл {month}.json')
-
-        with open(f'{month}.json', 'w', encoding='utf-8') as f:
-            json.dump(month_dict, f, ensure_ascii=False, indent=4)
+                with open(os.path.join(base_image_dir, month, event, file_name), 'w') as f:
+                    f.write("asdasdasd")
 
 
 if __name__ == "__main__":
     main()
-
-
-
-
 
     # url = parse_url("https://www.ozon.ru/product/planshet-s-klaviaturoy-wuya-podderzhka-gps-navigatsii-podhodit-dlya-igr-kino-i-749429137/?advert=LO76fZ6RQAxLfIGlFx2TK6SLdOmyvvlR_gIG8g6c7pnEi9I2EhnpuVy2QWNQDElfRo3FAyCOr3R9nBj7ca_qKqAHR1kMQWo5fabX8KYQRgSMFW72btB8pNDRVKvys8Ud5cVZ76TgnNnuybJCmxNL_4k5x6DNkkkf4St2xOGK_-g0zE25O53v8DxcTvqESnLEOGFDOqJ_cGlBxhOGN7a7cA7g-XofdZiiXocQMVjqgyV0AIGmnEOrKqn9kJda-wLh9a3kqDpYpKRYL9kCiNPcJrRLLaIBI06lAjSeCco3XdNpbNhNP0xubZ2KtMNhNkLGzyn2-vOeEPUaBE7DAn7AXrC_Q12umW-QcmtKqnH9BLq9gA2PCWj1SzwLcKA0tuaQMr4_FD1w-w1Y9ljBXts_YgyHwtWVxFa_k_0VRZIpB3JjQTpb6FJQvrTfVXc33stWehYBGzlDU0c-fwBkPTS-LAJJ0STBDbEyz22Q5CtKxBdsj4Ou_SaJdbUIAeUkjB6Jotk-dHT_ofwIfLHmT3jVrNIJkQFr7rMXBPWIlHCpGBxejDQ3-tVBWk6xS-3WOOU9AIOPE3E8oB0ldXZs7OZXoCQ-rKCwuzVKWl8_7oxcj-kfchi5GpmW7rUlBuKzvbOOWlQ-ziV6oO-t6O1g3YIiTs-TUj5ZpQpOHMqn6Yemb9c&avtc=1&avte=2&avts=1666429096&sh=h6B8Dgt9jw")
     # asyncio.run(get_product(url))
