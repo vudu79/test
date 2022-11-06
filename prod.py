@@ -101,6 +101,7 @@ from bs4 import BeautifulSoup
 
 
 def main():
+    domen_name = "https://pozdravik.com/"
     words = {
         "janvar": "january",
         "fevral": "february",
@@ -172,23 +173,39 @@ def main():
         js = f.read()
 
     year = json.loads(js)
+    monthes = year.keys()
 
-    jan_url = year["february"]
+    for month in monthes:
+        month_dict = {}
+        month_ivents = year[month]
+        month_ivents_keys = month_ivents.keys()
+        print(f'обарбатываю месяц - {month}')
 
-    res = requests.get(jan_url["2 февраля - День победы в Сталинградской битве"])
+        for ivents_key in month_ivents_keys:
+            print(f'ищу открытки из {ivents_key}')
 
-    soup = BeautifulSoup(res.text, "html.parser")
+            res = requests.get(month_ivents[ivents_key])
+            soup = BeautifulSoup(res.text, "html.parser")
 
-    img_src = soup.find("div", class_="b-cmall__dsn_center_block1_content")
+            div = soup.find("div", class_="b-cmall__dsn_center_block1_content")
 
-    img_url_list = []
+            img_url_list = []
 
-    for img in img_src.find_all("img"):
-        img_url_list.append("https://pozdravik.com/" + img["src"])
+            for img in div.find_all("img"):
+                img_url_list.append(domen_name + img["src"])
 
-    print(img_url_list)
+            month_dict[ivents_key] = img_url_list
+        print(f'записываю ссылки в файл {month}.json')
+        with open(f'{month}.json', 'w', encoding='utf-8') as f:
+            json.dump(month_dict, f, ensure_ascii=False, indent=4)
+
+
 if __name__ == "__main__":
     main()
+
+
+
+
 
     # url = parse_url("https://www.ozon.ru/product/planshet-s-klaviaturoy-wuya-podderzhka-gps-navigatsii-podhodit-dlya-igr-kino-i-749429137/?advert=LO76fZ6RQAxLfIGlFx2TK6SLdOmyvvlR_gIG8g6c7pnEi9I2EhnpuVy2QWNQDElfRo3FAyCOr3R9nBj7ca_qKqAHR1kMQWo5fabX8KYQRgSMFW72btB8pNDRVKvys8Ud5cVZ76TgnNnuybJCmxNL_4k5x6DNkkkf4St2xOGK_-g0zE25O53v8DxcTvqESnLEOGFDOqJ_cGlBxhOGN7a7cA7g-XofdZiiXocQMVjqgyV0AIGmnEOrKqn9kJda-wLh9a3kqDpYpKRYL9kCiNPcJrRLLaIBI06lAjSeCco3XdNpbNhNP0xubZ2KtMNhNkLGzyn2-vOeEPUaBE7DAn7AXrC_Q12umW-QcmtKqnH9BLq9gA2PCWj1SzwLcKA0tuaQMr4_FD1w-w1Y9ljBXts_YgyHwtWVxFa_k_0VRZIpB3JjQTpb6FJQvrTfVXc33stWehYBGzlDU0c-fwBkPTS-LAJJ0STBDbEyz22Q5CtKxBdsj4Ou_SaJdbUIAeUkjB6Jotk-dHT_ofwIfLHmT3jVrNIJkQFr7rMXBPWIlHCpGBxejDQ3-tVBWk6xS-3WOOU9AIOPE3E8oB0ldXZs7OZXoCQ-rKCwuzVKWl8_7oxcj-kfchi5GpmW7rUlBuKzvbOOWlQ-ziV6oO-t6O1g3YIiTs-TUj5ZpQpOHMqn6Yemb9c&avtc=1&avte=2&avts=1666429096&sh=h6B8Dgt9jw")
     # asyncio.run(get_product(url))
