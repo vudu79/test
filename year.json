@@ -1,5 +1,5 @@
 {
-    "janvar": {
+    "january": {
         "1 января - Начало января": "https://pozdravik.com/prazdniki/janvar/nachalo",
         "1 января - Новый год": "https://pozdravik.com/prazdniki/janvar/novyj-god",
         "1 января - Всемирный день мира": "https://pozdravik.com/prazdniki/janvar/den-mira",
@@ -32,7 +32,7 @@
         "31 января - День рождения русской водки": "https://pozdravik.com/prazdniki/janvar/den-vodki",
         "31 января - Международный день ювелира": "https://pozdravik.com/prazdniki/janvar/den-juvelira"
     },
-    "mart": {
+    "march": {
         "1 марта - Первый день Весны": "https://pozdravik.com/prazdniki/mart/nachalo-vesny",
         "1 марта - Всемирный день кошек": "https://pozdravik.com/prazdniki/mart/den-koshek",
         "1 марта - День пива": "https://pozdravik.com/prazdniki/mart/den-piva",
@@ -59,7 +59,7 @@
         "27 марта - Международный день театра": "https://pozdravik.com/prazdniki/mart/den-teatra",
         "30 марта - Именины Алексея": "https://pozdravik.com/prazdniki/mart/imeniny-alekseja"
     },
-    "maj": {
+    "may": {
         "1 мая - Начало мая": "https://pozdravik.com/prazdniki/maj/nachalo",
         "1 мая - 1 мая праздник весны и труда": "https://pozdravik.com/prazdniki/maj/pervoe-maja",
         "3 мая - День Солнца": "https://pozdravik.com/prazdniki/maj/den-solnca",
@@ -89,7 +89,7 @@
         "31 мая - День российской адвокатуры": "https://pozdravik.com/prazdniki/maj/den-advokata",
         "31 мая - Последний день весны": "https://pozdravik.com/prazdniki/maj/poslednij-den-vesny"
     },
-    "ijul": {
+    "july": {
         "1 июля - Начало июля": "https://pozdravik.com/prazdniki/ijul/nachalo",
         "1 июля -  День ветеранов боевых действий": "https://pozdravik.com/prazdniki/ijul/den-veteranov",
         "2 июля - День спорт журналиста": "https://pozdravik.com/prazdniki/ijul/den-sport-zhurnalista",
@@ -119,7 +119,7 @@
         "29 июля - Именины Юлии": "https://pozdravik.com/prazdniki/ijul/imeniny-julii",
         "30 июля - Международный день дружбы": "https://pozdravik.com/prazdniki/ijun/den-ekonomista"
     },
-    "sentjabr": {
+    "september": {
         "1 сентября - День знаний": "https://pozdravik.com/prazdniki/sentjabr/den-znanij",
         "1 сентября - Первый день осени": "https://pozdravik.com/prazdniki/sentjabr/pervyj-den-oseni",
         "2 сентября - День российской гвардии": "https://pozdravik.com/prazdniki/sentjabr/den-rossijskoj-gvardii",
@@ -149,7 +149,7 @@
         "Последнее воскресенье сентября - День машиностроителя": "https://pozdravik.com/prazdniki/sentjabr/kurban-bajram",
         "70 дней после празднования Ураза байрам - Курбан Байрам": "https://pozdravik.com/prazdniki/sentjabr/den-serdca"
     },
-    "nojabr": {
+    "november": {
         "1 ноября - Начало ноября": "https://pozdravik.com/prazdniki/nojabr/nachalo",
         "1 ноября - День менеджера": "https://pozdravik.com/prazdniki/nojabr/den-menedzhera",
         "1 ноября - День вегана": "https://pozdravik.com/prazdniki/nojabr/den-vegana",
@@ -190,7 +190,7 @@
         "30 ноября - Последний день осени": "https://pozdravik.com/prazdniki/nojabr/poslednij-den-oseni",
         "30 ноября - Всемирный день секса": "https://pozdravik.com/prazdniki/nojabr/den-seksa"
     },
-    "fevral": {
+    "february": {
         "1 февраля - Первый день февраля": "https://pozdravik.com/prazdniki/fevral/nachalo-fevralja",
         "2 февраля - День сурка": "https://pozdravik.com/prazdniki/fevral/imeniny-inny",
         "2 февраля - Именины Инны": "https://pozdravik.com/prazdniki/fevral/den-surka",
@@ -214,7 +214,7 @@
         "23 февраля - День защитника отечества": "https://pozdravik.com/prazdniki/fevral/den-zaschitnika",
         "28 февраля - Последний день зимы": "https://pozdravik.com/prazdniki/fevral/poslednij-den-zimy"
     },
-    "aprel": {
+    "april": {
         "1 апреля - Начало апреля": "https://pozdravik.com/prazdniki/aprel/nachalo",
         "1 апреля - 1 апреля - День Смеха": "https://pozdravik.com/prazdniki/aprel/den-smeha",
         "2 апреля - Именины Светланы": "https://pozdravik.com/prazdniki/aprel/imeniny-svetlany",
@@ -238,7 +238,7 @@
         "30 апреля - День пожарной охраны": "https://pozdravik.com/prazdniki/aprel/den-pozharnika",
         "30 апреля - Вальпургиева ночь": "https://pozdravik.com/prazdniki/aprel/valpurgieva-noch"
     },
-    "ijun": {
+    "june": {
         "1 июня - День защиты детей": "https://pozdravik.com/prazdniki/ijun/den-zaschity-detej",
         "1 июня - День северного флота": "https://pozdravik.com/prazdniki/ijun/den-severnogo-flota",
         "1 июня - Первый день лета": "https://pozdravik.com/prazdniki/ijun/nachalo-leta",
@@ -254,7 +254,7 @@
         "28 июня - День Конституции Украины": "https://pozdravik.com/prazdniki/ijun/konstitucija-ukrainy",
         "30 июня - День экономиста": "https://pozdravik.com/prazdniki/ijun/den-ekonomista"
     },
-    "avgust": {
+    "august": {
         "1 августа - Начало августа": "https://pozdravik.com/prazdniki/avgust/nachalo",
         "1 августа - День инкассатора": "https://pozdravik.com/prazdniki/avgust/den-inkassatora",
         "1 августа - День тыла вооруженных сил": "https://pozdravik.com/prazdniki/avgust/den-tyla",
@@ -275,7 +275,7 @@
         "29 августа - Ореховый (третий) спас": "https://pozdravik.com/prazdniki/avgust/orehovyj-spas",
         "31 августа - День ветеринара": "https://pozdravik.com/prazdniki/avgust/den-veterinara"
     },
-    "oktjabr": {
+    "october": {
         "1 октября - Начало октября": "https://pozdravik.com/prazdniki/oktjabr/nachalo",
         "1 октября - Именины Ирины": "https://pozdravik.com/prazdniki/oktjabr/imeniny-iriny",
         "1 октября - Всемирный день пожилого человека": "https://pozdravik.com/prazdniki/oktjabr/den-pozhilogo",
@@ -321,7 +321,7 @@
         "Третье воскресенье октября - День работников дорожного хозяйства": "https://pozdravik.com/prazdniki/oktjabr/den-pischevika",
         "Третье воскресенье октября - День пищевика": "https://pozdravik.com/prazdniki/oktjabr/den-voditelja"
     },
-    "dekabr": {
+    "december": {
         "1 декабря - Первый день зимы": "https://pozdravik.com/prazdniki/dekabr/pervyj-den-zimy",
         "1 декабря - День хоккея": "https://pozdravik.com/prazdniki/dekabr/den-hokkeja",
         "2 декабря - День банковского работника": "https://pozdravik.com/prazdniki/dekabr/den-bankira",

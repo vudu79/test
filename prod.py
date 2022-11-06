@@ -101,11 +101,25 @@ from bs4 import BeautifulSoup
 
 
 def main():
+    words = {
+        "janvar": "january",
+        "fevral": "february",
+        "mart": "march",
+        "aprel": "april",
+        "maj": "may",
+        "ijun": "june",
+        "ijul": "july",
+        "avgust": "august",
+        "sentjabr": "september",
+        "oktjabr": "october",
+        "nojabr": "november",
+        "dekabr": "december",
+    }
     # res = requests.get("https://pozdravik.com/prazdniki")
-
+    #
     # with open("page.html", "w", encoding="utf-8") as file:
     #     page = file.write(res.text)
-
+    #
     # with open("page.html", "r", encoding="utf-8") as file:
     #     page = file.read()
     #
@@ -148,15 +162,31 @@ def main():
     #         days[titles[num].strip()] = f'https://pozdravik.com/{link["href"]}'
     #
     #
-    #     year[name[-1]] = days
+    #     year[words[name[-1]]] = days
     # with open('year.json', 'w', encoding='utf-8') as f:
     #     json.dump(year, f, ensure_ascii=False, indent=4)
 
+    year = dict()
+
     with open('year.json', 'r', encoding='utf-8') as f:
-        year = json.load(f)
-    print(year)
+        js = f.read()
 
+    year = json.loads(js)
 
+    jan_url = year["february"]
+
+    res = requests.get(jan_url["2 февраля - День победы в Сталинградской битве"])
+
+    soup = BeautifulSoup(res.text, "html.parser")
+
+    img_src = soup.find("div", class_="b-cmall__dsn_center_block1_content")
+
+    img_url_list = []
+
+    for img in img_src.find_all("img"):
+        img_url_list.append("https://pozdravik.com/" + img["src"])
+
+    print(img_url_list)
 if __name__ == "__main__":
     main()
 
