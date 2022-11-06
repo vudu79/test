@@ -194,8 +194,11 @@ def main():
             for img in div.find_all("img"):
                 img_url_list.append(domen_name + img["src"])
 
-            month_dict[ivents_key] = img_url_list
+            key_name = ivents_key.replace("-", "").replace(" ", "_")
+            month_dict[key_name] = img_url_list
+
         print(f'записываю ссылки в файл {month}.json')
+
         with open(f'{month}.json', 'w', encoding='utf-8') as f:
             json.dump(month_dict, f, ensure_ascii=False, indent=4)
 
