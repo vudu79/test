@@ -2,7 +2,7 @@
 import requests
 import json
 import os
-
+import logging
 
 def download_img(url, file_path):
     try:
@@ -15,15 +15,18 @@ def download_img(url, file_path):
         file_name = os.path.join(file_path, name)
         print(resp.status_code)
         if resp.status_code == 200:
-            print(f'Начал запись файла {file_name} в папку {file_path} \n')
+            print(f'Начал запись файла {file_name} в папку {file_path}. Ответ сервера {resp.status_code}')
+            logging.info(f'Начал запись файла {file_name} в папку {file_path} \n')
             with open(file_name, 'wb') as f:
                 for chunk in resp.iter_content(chunk_size=1024):
                     if chunk:
                         f.write(chunk)
-            print(f'Записал файл {file_name} в папку {file_path} \n')
+            logging.info(f'Записал файл {file_name} в папку {file_path} \n')
             print("------------------------------------------------")
+
     except Exception as e:
         print(f'Сработало исключение {e}')
+        logging.error(f'сработало исключение - {e}')
 
 
 
@@ -57,8 +60,9 @@ def main():
         month_events_list = calendar_dict[month].keys()
 
         for event in month_events_list:
-            if not os.path.isdir(os.path.join(base_image_dir, month, event)):
-                snake_event = event.replace(" ", "_").replace(".", "_")
+            snake_event = event.replace(" ", "_").replace(".", "=")
+
+            if not os.path.isdir(os.path.join(base_image_dir, month, snake_event)):
                 os.makedirs(os.path.join(os.getcwd(), base_image_dir, words[month], snake_event))
 
                 files_path = os.path.join(os.getcwd(),base_image_dir, words[month], snake_event)
@@ -69,4 +73,6 @@ def main():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, filename="py_log.log", filemode="w",
+                        format="%(asctime)s %(levelname)s %(message)s")
     main()
