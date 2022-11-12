@@ -1,4 +1,7 @@
+import datetime
+import hashlib
 import asyncio
+import shutil
 import time
 import sys
 import aiohttp
@@ -107,49 +110,34 @@ import aiohttp
 import async_timeout
 
 
-async def get_url(url, session):
-    file_name = str(uuid.uuid4())
-    async with async_timeout.timeout(120):
-        async with session.get(url) as response:
-            with open(file_name, 'wb') as fd:
-                async for data in response.content.iter_chunked(1024):
-                    fd.write(data)
-                    return 'Successfully downloaded ' + file_name
+def download_img(url, file_path):
+    session = requests.Session()
+
+    resp = session.get(url, stream=True)
+
+    name = url.split("/")[-1]
+
+    file_name = os.path.join(file_path, name)
+    if resp.status_code == 200:
+        print(f'Начал запись файла {file_name} в папку {file_path} \n')
+        with open(file_name, 'wb') as f:
+            for chunk in resp.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
+        print(f'Записал файл {file_name} в папку {file_path} \n')
+        print("------------------------------------------------")
 
 
-async def as_download(urls):
-    async with aiohttp.ClientSession() as session:
-        tasks = [get_url(url, session) for url in urls]
-        return await asyncio.gather(*tasks)
-
-
-urls = ["https://www.python.org/events/python-events/801/",
-        "https://www.python.org/events/python-events/790/",
-        "https://www.python.org/events/python-user-group/816/",
-        "https://www.python.org/events/python-events/757/"]
-
-loop = asyncio.get_event_loop()
-results = loop.run_until_complete(as_download(urls))
-
-print('\n'.join(results))
+#
+# loop = asyncio.get_event_loop()
+# results = loop.run_until_complete(as_download(urls))
+#
+# print('\n'.join(results))
 
 
 def main():
     domen_name = "https://pozdravik.com/"
-    words = {
-        "janvar": "january",
-        "fevral": "february",
-        "mart": "march",
-        "aprel": "april",
-        "maj": "may",
-        "ijun": "june",
-        "ijul": "july",
-        "avgust": "august",
-        "sentjabr": "september",
-        "oktjabr": "october",
-        "nojabr": "november",
-        "dekabr": "december",
-    }
+
     # res = requests.get("https://pozdravik.com/prazdniki")
     #
     # with open("page.html", "w", encoding="utf-8") as file:
@@ -237,31 +225,136 @@ def main():
     #     with open(f'{month}.json', 'w', encoding='utf-8') as f:
     #         json.dump(month_dict, f, ensure_ascii=False, indent=4)
 
+    words = {
+        "Январь": "january",
+        "Февраль": "february",
+        "Март": "march",
+        "Апрель": "april",
+        "Май": "may",
+        "Июнь": "june",
+        "Июль": "july",
+        "Август": "august",
+        "Сентябрь": "september",
+        "Октябрь": "october",
+        "Ноябрь": "november",
+        "Декабрь": "december",
+    }
+
+
     month = dict()
     base_image_dir = "images"
-    base_month_dir = "monthes"
 
-    for month in words.values():
-        if not os.path.isdir(os.path.join(base_image_dir, month)):
-            os.mkdir(os.path.join(base_image_dir, month))
+    with open('calendar.json', 'r', encoding='utf-8') as f:
+        js = f.read()
 
-        with open(f'{os.path.join(base_month_dir, month)}.json', 'r', encoding='utf-8') as f:
-            js = f.read()
+    calendar_dict = json.loads(js)
 
-        month_dict = json.loads(js)
-        events_list = list(month_dict.keys())
+    monthes_list = calendar_dict.keys()
 
-        for event in events_list:
+    for month in monthes_list:
+        month_events_list = calendar_dict[month].keys()
+
+        for event in month_events_list:
             if not os.path.isdir(os.path.join(base_image_dir, month, event)):
-                os.mkdir(os.path.join(base_image_dir, month, event))
-                file_name = event + ".json"
+                snake_event = event.replace(" ", "_").replace(".", "_")
+                os.mkdir(os.path.join(os.getcwd(), base_image_dir, words[month], snake_event))
 
-                with open(os.path.join(base_image_dir, month, event, file_name), 'w') as f:
-                    f.write("asdasdasd")
+                files_path = os.path.join(os.getcwd(),base_image_dir, words[month], snake_event)
 
+                download_img(calendar_dict[month][event], files_path)
+
+
+
+    # words = {
+    #     "janvar": "january",
+    #     "fevral": "february",
+    #     "mart": "march",
+    #     "aprel": "april",
+    #     "maj": "may",
+    #     "ijun": "june",
+    #     "ijul": "july",
+    #     "avgust": "august",
+    #     "sentjabr": "september",
+    #     "oktjabr": "october",
+    #     "nojabr": "november",
+    #     "dekabr": "december",
+    # }
+
+    #
+    # with open('calendar.json', 'r', encoding='utf-8') as f:
+    #     js = f.read()
+    #
+    # calendar_dict = json.loads(js)
+    # # print(calendar_dict)
+    #
+    # calendar_dict_new = {}
+    #
+    # month_events = {}
+    #
+    # for rus_month,  month in words.items():
+    #     month_dict_new = {}
+    #     month_events = calendar_dict[month]
+    #     # print(month_events)
+    #     for key in month_events.keys():
+    #         new_key = get_new_key(key)
+    #         month_dict_new[new_key] = month_events[key]
+    #         # print(month_dict_new)
+    #
+    #     calendar_dict_new[rus_month] = month_dict_new
+    #
+    #
+    # with open('calendar_new.json', 'w', encoding='utf-8') as f:
+    #     json.dump(calendar_dict_new, f, ensure_ascii=False, indent=4)
+    #
+    # # print(calendar_dict_new)
+
+
+#
+# def get_new_key(key):
+#     month_tuple = (
+#         "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября",
+#         "декабря")
+#     new_key = ""
+#     key_list = key.split("__")
+#     date_path = key_list[0].split("_")
+#
+#     if len(date_path) > 1:
+#         if date_path[1] in month_tuple:
+#
+#             match date_path[1]:
+#
+#                 case "января":
+#                     new_key = date_path[0] + ".01" + " - " + key_list[1].replace("_", " ")
+#                 case "февраля":
+#                     new_key = date_path[0] + ".02" + " - " + key_list[1].replace("_", " ")
+#                 case "марта":
+#                     new_key = date_path[0] + ".03" + " - " + key_list[1].replace("_", " ")
+#                 case "апреля":
+#                     new_key = date_path[0] + ".04" + " - " + key_list[1].replace("_", " ")
+#                 case "мая":
+#                     new_key = date_path[0] + ".05" + " - " + key_list[1].replace("_", " ")
+#                 case "июня":
+#                     new_key = date_path[0] + ".06" + " - " + key_list[1].replace("_", " ")
+#                 case "июля":
+#                     new_key = date_path[0] + ".07" + " - " + key_list[1].replace("_", " ")
+#                 case "августа":
+#                     new_key = date_path[0] + ".08" + " - " + key_list[1].replace("_", " ")
+#                 case "сентября":
+#                     new_key = date_path[0] + ".09" + " - " + key_list[1].replace("_", " ")
+#                 case "октября":
+#                     new_key = date_path[0] + ".10" + " - " + key_list[1].replace("_", " ")
+#                 case "ноября":
+#                     new_key = date_path[0] + ".11" + " - " + key_list[1].replace("_", " ")
+#                 case "декабря":
+#                     new_key = date_path[0] + ".12" + " - " + key_list[1].replace("_", " ")
+#     return new_key
 
 if __name__ == "__main__":
     main()
+# print(len('3.01 - День Рождения Русской Матрёшки'.encode('utf-8')))
+# # url = parse_url("https://www.ozon.ru/product/planshet-s-klaviaturoy-wuya-podderzhka-gps-navigatsii-podhodit-dlya-igr-kino-i-749429137/?advert=LO76fZ6RQAxLfIGlFx2TK6SLdOmyvvlR_gIG8g6c7pnEi9I2EhnpuVy2QWNQDElfRo3FAyCOr3R9nBj7ca_qKqAHR1kMQWo5fabX8KYQRgSMFW72btB8pNDRVKvys8Ud5cVZ76TgnNnuybJCmxNL_4k5x6DNkkkf4St2xOGK_-g0zE25O53v8DxcTvqESnLEOGFDOqJ_cGlBxhOGN7a7cA7g-XofdZiiXocQMVjqgyV0AIGmnEOrKqn9kJda-wLh9a3kqDpYpKRYL9kCiNPcJrRLLaIBI06lAjSeCco3XdNpbNhNP0xubZ2KtMNhNkLGzyn2-vOeEPUaBE7DAn7AXrC_Q12umW-QcmtKqnH9BLq9gA2PCWj1SzwLcKA0tuaQMr4_FD1w-w1Y9ljBXts_YgyHwtWVxFa_k_0VRZIpB3JjQTpb6FJQvrTfVXc33stWehYBGzlDU0c-fwBkPTS-LAJJ0STBDbEyz22Q5CtKxBdsj4Ou_SaJdbUIAeUkjB6Jotk-dHT_ofwIfLHmT3jVrNIJkQFr7rMXBPWIlHCpGBxejDQ3-tVBWk6xS-3WOOU9AIOPE3E8oB0ldXZs7OZXoCQ-rKCwuzVKWl8_7oxcj-kfchi5GpmW7rUlBuKzvbOOWlQ-ziV6oO-t6O1g3YIiTs-TUj5ZpQpOHMqn6Yemb9c&avtc=1&avte=2&avts=1666429096&sh=h6B8Dgt9jw")
+# # asyncio.run(get_product(url))
+# s = str(hash('3.фвфвфвфцвфцвфцвфвыдлатфжылджафыажфдатщутшажфкт01 - День Рождения Русской Матрёшки'))
+# print(len(s.encode('utf-8')))
 
-    # url = parse_url("https://www.ozon.ru/product/planshet-s-klaviaturoy-wuya-podderzhka-gps-navigatsii-podhodit-dlya-igr-kino-i-749429137/?advert=LO76fZ6RQAxLfIGlFx2TK6SLdOmyvvlR_gIG8g6c7pnEi9I2EhnpuVy2QWNQDElfRo3FAyCOr3R9nBj7ca_qKqAHR1kMQWo5fabX8KYQRgSMFW72btB8pNDRVKvys8Ud5cVZ76TgnNnuybJCmxNL_4k5x6DNkkkf4St2xOGK_-g0zE25O53v8DxcTvqESnLEOGFDOqJ_cGlBxhOGN7a7cA7g-XofdZiiXocQMVjqgyV0AIGmnEOrKqn9kJda-wLh9a3kqDpYpKRYL9kCiNPcJrRLLaIBI06lAjSeCco3XdNpbNhNP0xubZ2KtMNhNkLGzyn2-vOeEPUaBE7DAn7AXrC_Q12umW-QcmtKqnH9BLq9gA2PCWj1SzwLcKA0tuaQMr4_FD1w-w1Y9ljBXts_YgyHwtWVxFa_k_0VRZIpB3JjQTpb6FJQvrTfVXc33stWehYBGzlDU0c-fwBkPTS-LAJJ0STBDbEyz22Q5CtKxBdsj4Ou_SaJdbUIAeUkjB6Jotk-dHT_ofwIfLHmT3jVrNIJkQFr7rMXBPWIlHCpGBxejDQ3-tVBWk6xS-3WOOU9AIOPE3E8oB0ldXZs7OZXoCQ-rKCwuzVKWl8_7oxcj-kfchi5GpmW7rUlBuKzvbOOWlQ-ziV6oO-t6O1g3YIiTs-TUj5ZpQpOHMqn6Yemb9c&avtc=1&avte=2&avts=1666429096&sh=h6B8Dgt9jw")
-    # asyncio.run(get_product(url))
+# print(datetime.datetime.today().strftime("%-d.%m"))
