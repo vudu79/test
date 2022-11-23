@@ -1,0 +1,70 @@
+import datetime
+import json
+import logging
+
+from fake_useragent import UserAgent
+import requests
+from bs4 import BeautifulSoup
+
+
+def main():
+    domen = "https://chpic.su"
+    pack_info_dict = dict()
+    results = list()
+    stickers_list = list()
+    ua = UserAgent()
+    headers = {
+        "user-agent": ua.random
+    }
+
+    print(headers["user-agent"])
+    for x in range(0, 342):
+        uri = f"/ru/stickers/?sortby=date&page={x}"
+        print(uri + " " + str(datetime.datetime.now()))
+        try:
+            res = requests.get(domen + uri, headers=headers)
+            if res.status_code == 200:
+
+                soup = BeautifulSoup(res.text, "lxml")
+                divs = soup.find_all("div", class_="collections_list_item clickable_area")
+
+                for div in divs:
+                    pack_info_dict["name"] = div.find("div", class_="title").find("a").text
+                    pack_info_dict["url"] = domen + div.find("div", class_="title").find("a").get("href")
+                    pack_info_dict["count"] = div.find("div", class_="subtitle").text
+                    pack_info_dict["date"] = div.find("div", class_="datetime").find("span", class_="t").text
+                    try:
+                        pack_res = requests.get(pack_info_dict["url"], headers=headers)
+                        if pack_res.status_code == 200:
+
+                            pack_soup = BeautifulSoup(pack_res.text, "lxml")
+                            pack_divs = pack_soup.find_all("div", class_="stickers_list_item")
+
+                            for pack_div in pack_divs:
+                                stickers_list.append(domen + pack_div.find("a").find("img").get("src"))
+
+                            buffer_list = stickers_list.copy()
+
+                            pack_info_dict["stickers"] = buffer_list
+
+                            stickers_list.clear()
+
+                            # print(buffer_list)
+                            results.append(pack_info_dict)
+                    except Exception as eee:
+                        logging.error(f"Проблеммы с requests внутри пака -  {eee}")
+        except Exception as e:
+            logging.error(f"Проблеммы с requests на странице с паками - {e}")
+
+            print(results)
+    try:
+        with open("stickers.json", "w", encoding="utf-8") as f:
+            json.dump(results, f, indent=4)
+    except Exception as ee:
+        logging.error(f"Проблеммы с записью в файл - {ee}")
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, filename="stickers_log.log", filemode="w",
+                        format="%(asctime)s %(levelname)s %(message)s")
+    main()

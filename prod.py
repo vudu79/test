@@ -71,20 +71,23 @@ def main():
 
         for event in month_events_list:
             event_storage = event.replace(" ", "_").replace(".", "=")
-            events_storage_list.clear()
             for img_url in calendar_dict[month][event]:
                 file_name = img_url.split("/")[4]
-                events_storage_list.append(str(os.path.join(base_image_dir, month, event_storage, file_name)))
+                events_storage_list.append(str(os.path.join(base_image_dir, words[month], event_storage, file_name)))
+            bufer_list = events_storage_list.copy()
+            month_storage_dict[event_storage] = bufer_list
+            events_storage_list.clear()
 
-            month_storage_dict[event_storage] = events_storage_list
 
         calendar_storage_dict[month] = month_storage_dict
 
     with open("calendar_storage.json", "w", encoding='utf-8') as file:
-        json.dump(calendar_storage_dict, file, indent=4)
+        json.dump(calendar_storage_dict, file, indent=4, ensure_ascii=False)
 
     print(calendar_storage_dict)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, filename="py_log.log", filemode="w",
+                        format="%(asctime)s %(levelname)s %(message)s")
     main()
