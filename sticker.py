@@ -29,6 +29,7 @@ def main():
                 soup = BeautifulSoup(res.text, "lxml")
                 divs = soup.find_all("div", class_="collections_list_item clickable_area")
 
+
                 for div in divs:
                     pack_info_dict["name"] = div.find("div", class_="title").find("a").text
                     pack_url = domen + div.find("div", class_="title").find("a").get("href")
